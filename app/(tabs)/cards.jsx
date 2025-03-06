@@ -80,11 +80,11 @@ export default function CardsScreen() {
         </Pressable>
       </Animated.View>       */}
       <View style={styles.container}>
-        <Pressable style={styles.card} onPress={flipCard}>
-          <Animated.View style={[styles.cardFront, flipToFront]}>
+        <Pressable style={styles.cardContainer} onPress={flipCard}>
+          <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
             <Text style={styles.text}>front</Text>
           </Animated.View>
-          <Animated.View style={[styles.cardBack, flipToBack]}>
+          <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
             <Text style={styles.text}>back</Text>
           </Animated.View>
         </Pressable>
@@ -101,43 +101,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF",
     marginTop: 100,
   },
-  card: {
-    flex: .5,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: "#E8E8E8",
+  cardContainer:{
+    height: height - 10,
+    width: width - 20,
+  },
+  card:{
+    borderRadius: 10,
+    fontSize: 50,
     justifyContent: "center",
-    backgroundColor: "white",
+    alignItems: "center",
     backfaceVisibility: 'hidden',
+    position: "absolute",
     width: width - 20,
     height: height / 3,
-    alignSelf: "center",
-    position: "absolute"
   },
   cardBack: {
-    backgroundColor: "#4e44c0",
-    borderRadius: 10,
-    fontSize: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backfaceVisibility: 'hidden',
-    position: "absolute",
-    width: width - 20,
-    height: height / 3,
-
+    backgroundColor: "#4e44c0"
   },
   cardFront: {
-    backgroundColor: "#7140ce",
-    borderRadius: 10,
-    fontSize: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backfaceVisibility: 'hidden',
-    position: "absolute",
-    width: width - 20,
-    height: height / 3,
-
-
+    backgroundColor: "#7140ce"
   },
   text: {
     textAlign: "center",
