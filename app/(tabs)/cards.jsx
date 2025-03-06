@@ -1,5 +1,5 @@
-import React, {useRef} from 'react';
-import { View, Text, StyleSheet, Button, Pressable, Animated } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 
 export default function CardsScreen() {
@@ -79,23 +79,21 @@ export default function CardsScreen() {
           <Text>front</Text>
         </Pressable>
       </Animated.View>       */}
-      <Pressable style={styles.card} onPress={flipCard}>
-        <View style={styles.card}>
-          <Animated.View style={[ styles.cardFront, flipToFront]}>
-            <Text>front</Text>
+      <View style={styles.container}>
+        <Pressable style={styles.card} onPress={flipCard}>
+          <Animated.View style={[styles.cardFront, flipToFront]}>
+            <Text style={styles.text}>front</Text>
           </Animated.View>
-        </View>
-      </Pressable>
-
-      <Pressable
-        style={styles.cardBack}
-        onPress={() => { console.log("you pressed the back!") }}  >
-        <Text>back</Text>
-      </Pressable>
+          <Animated.View style={[styles.cardBack, flipToBack]}>
+            <Text style={styles.text}>back</Text>
+          </Animated.View>
+        </Pressable>
+      </View>
     </View >
   );
 };
 
+const { width, height } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   container: {
@@ -109,28 +107,42 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#E8E8E8",
     justifyContent: "center",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    backfaceVisibility: 'hidden',
+    width: width - 20,
+    height: height / 3,
+    alignSelf: "center",
+    position: "absolute"
   },
   cardBack: {
     backgroundColor: "#4e44c0",
-    flex: .5,
     borderRadius: 10,
     fontSize: 50,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backfaceVisibility: 'hidden',
+    position: "absolute",
+    width: width - 20,
+    height: height / 3,
+
   },
   cardFront: {
     backgroundColor: "#7140ce",
-    flex: .5,
     borderRadius: 10,
     fontSize: 50,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backfaceVisibility: 'hidden',
+    position: "absolute",
+    width: width - 20,
+    height: height / 3,
+
 
   },
   text: {
     textAlign: "center",
     fontSize: 50,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    color: "white"
   }
 });
