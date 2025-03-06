@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
-  isFlippedRef = useRef(false)
+  var isFlippedRef = useRef(false)
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -76,15 +76,13 @@ export default function CardsScreen() {
           return (
             <View>
               <View style={styles.container}>
-                <Pressable style={[styles.cardContainer]} onPress={() => { flipCard(); }}>
-                  <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+              <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
                   <Text style={styles.text}>front</Text>
                   <Text style={styles.text}>{card}</Text>
                   </Animated.View>
                   <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
                     <Text style={styles.text}>back</Text>
                   </Animated.View>
-                </Pressable>
               </View>
             </View>
           )
@@ -96,8 +94,10 @@ export default function CardsScreen() {
 
           console.log(cardIndex)
         }}
+        onTapCard={(cardIndex) => { flipCard() }}
         onSwipedAll={() => { console.log('onSwipedAll') }}
         cardIndex={0}
+        infinite={true}
         backgroundColor={'#616622'}
         stackSize={3}
         stackSeparation={5}>
