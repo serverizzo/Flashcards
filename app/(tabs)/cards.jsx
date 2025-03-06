@@ -5,6 +5,7 @@ import Swiper from 'react-native-deck-swiper';
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
+  isFlippedRef = useRef(false)
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -28,7 +29,7 @@ export default function CardsScreen() {
 
   const flipCard = () => {
     console.log("pressed flip card")
-    if (isFlipped) {
+    if (isFlippedRef.current) {
       // animate back to the front side
       Animated.spring(flipAnimation, {
         toValue: 0,
@@ -45,41 +46,65 @@ export default function CardsScreen() {
         useNativeDriver: true,
       }).start();
     }
-    setIsFlipped(!isFlipped);
+    // setIsFlipped(!isFlipped);
+    isFlippedRef.current = !isFlippedRef.current
   };
 
   return (
     <View style={styles.container}>
-      {/* <Swiper
-        cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
-        renderCard={(card) => {
-          return (
-            <View style={styles.card}>
-              <Text style={styles.text}>{card}</Text>
-            </View>
-          )
-        }}
-        showSecondCard={false}
-        onSwiped={(cardIndex) => { console.log(cardIndex) }}
-        onSwipedAll={() => { console.log('onSwipedAll') }}
-        cardIndex={0}
-        backgroundColor={'#4FD0E9'}
-        stackSize={3}
-        stackSeparation={5}>
-      </Swiper> */}
+
       <Button
         onPress={() => { console.log('oulala') }}
         title="Press me">
         You can press me
       </Button>
-      {/* <Animated.View onPress={flipCard} style={[styles.card, isFlipped ? flipToBack : flipToFront]}>
-        <Pressable
-          style={styles.cardFront}
-          onPress={() => { console.log("you pressed the front!") }}  >
-          <Text>front</Text>
+
+      {/* <View style={styles.container}>
+        <Pressable style={[styles.cardContainer]} onPress={() => { flipCard(); }}>
+          <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+            <Text style={styles.text}>front</Text>
+          </Animated.View>
+          <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
+            <Text style={styles.text}>back</Text>
+          </Animated.View>
         </Pressable>
-      </Animated.View>       */}
-      <View style={styles.container}>
+      </View> */}
+
+      <Swiper
+        cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+        renderCard={(card) => {
+          return (
+            <View>
+              <View style={styles.container}>
+                <Pressable style={[styles.cardContainer]} onPress={() => { flipCard(); }}>
+                  <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+                  <Text style={styles.text}>front</Text>
+                  <Text style={styles.text}>{card}</Text>
+                  </Animated.View>
+                  <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
+                    <Text style={styles.text}>back</Text>
+                  </Animated.View>
+                </Pressable>
+              </View>
+            </View>
+          )
+        }}
+        showSecondCard={false}
+        onSwiped={(cardIndex) => {
+          // setIsFlipped(!isFlipped)
+          isFlippedRef.current = !isFlippedRef.current
+
+          console.log(cardIndex)
+        }}
+        onSwipedAll={() => { console.log('onSwipedAll') }}
+        cardIndex={0}
+        backgroundColor={'#616622'}
+        stackSize={3}
+        stackSeparation={5}>
+      </Swiper>
+
+
+      {/* <View style={styles.container}>
         <Pressable style={styles.cardContainer} onPress={flipCard}>
           <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
             <Text style={styles.text}>front</Text>
@@ -88,7 +113,10 @@ export default function CardsScreen() {
             <Text style={styles.text}>back</Text>
           </Animated.View>
         </Pressable>
-      </View>
+      </View> */}
+
+
+
     </View >
   );
 };
@@ -101,11 +129,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF",
     marginTop: 100,
   },
-  cardContainer:{
+  cardContainer: {
     height: height - 10,
     width: width - 20,
   },
-  card:{
+  card: {
     borderRadius: 10,
     fontSize: 50,
     justifyContent: "center",
@@ -126,5 +154,8 @@ const styles = StyleSheet.create({
     fontSize: 50,
     backgroundColor: "transparent",
     color: "white"
+  },
+  swiperCard: {
+    backgroundColor: "lime-400"
   }
 });
