@@ -52,47 +52,46 @@ export default function CardsScreen() {
 
   return (
     <View style={styles.container}>
-      <Swiper
-        cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
-        renderCard={(card) => {
-          return (
-            <View>
-              <View style={styles.container}>
-                <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
-                  <Text style={styles.text}>front</Text>
-                  <Text style={styles.text}>{card}</Text>
-                </Animated.View>
-                <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
-                  <Text style={styles.text}>back</Text>
-                  <Button
-                    title="definition"
+        <Swiper
+          cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+          renderCard={(card) => {
+            return (
+              <View>
+                <View style={styles.container}>
+                  <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+                    <Text style={styles.text}>front</Text>
+                    <Text style={styles.text}>{card}</Text>
+                  </Animated.View>
+                  <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
+                    <Text style={styles.text}>back</Text>
+                    <Button
+                      title="definition"
                     // onPress={() => { setModalVisible(true) }}
-                  />
-                </Animated.View>
+                    />
+                  </Animated.View>
+                </View>
               </View>
-            </View>
-          )
-        }}
-        showSecondCard={false}
-        onSwiped={(cardIndex) => {
-          // setIsFlipped(!isFlipped)
-          isFlippedRef.current = !isFlippedRef.current
+            )
+          }}
+          showSecondCard={false}
+          onSwiped={(cardIndex) => {
+            // setIsFlipped(!isFlipped)
+            isFlippedRef.current = !isFlippedRef.current
 
-          console.log(cardIndex)
-        }}
-        overlayLabels={myOverlayLabels}
-        // overlayLabelStyle={styles.myOverlayStyle}
-        onTapCard={(cardIndex) => {
-          flipCard()
-        }}
-        onSwipedAll={() => { console.log('onSwipedAll') }}
-        cardIndex={0}
-        infinite={true}
-        backgroundColor={'gray'}
-        stackSize={3}
-        stackSeparation={5}>
-      </Swiper>
-
+            console.log(cardIndex)
+          }}
+          overlayLabels={myOverlayLabels}
+          // overlayLabelStyle={styles.myOverlayStyle}
+          onTapCard={(cardIndex) => {
+            flipCard()
+          }}
+          onSwipedAll={() => { console.log('onSwipedAll') }}
+          cardIndex={0}
+          infinite={true}
+          backgroundColor={'gray'}
+          stackSize={3}
+          stackSeparation={5}>
+        </Swiper>
     </View >
   );
 };
@@ -105,10 +104,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center'
   },
-  cardContainer: {
-    height: height - 10,
-    width: width - 20,
-  },
+
   card: {
     borderRadius: 10,
     fontSize: 50,
@@ -117,7 +113,7 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
     position: "absolute",
     width: width - 20,
-    height: height * .7,
+    height: height * .8,
   },
   cardBack: {
     backgroundColor: "#4e44c0"
