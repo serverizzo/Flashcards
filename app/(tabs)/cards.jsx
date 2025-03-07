@@ -5,6 +5,7 @@ import Swiper from 'react-native-deck-swiper';
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
   var isFlippedRef = useRef(false)
 
   const flipAnimation = useRef(new Animated.Value(0)).current
@@ -52,46 +53,61 @@ export default function CardsScreen() {
 
   return (
     <View style={styles.container}>
-        <Swiper
-          cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
-          renderCard={(card) => {
-            return (
-              <View>
-                <View style={styles.container}>
-                  <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
-                    <Text style={styles.text}>front</Text>
-                    <Text style={styles.text}>{card}</Text>
-                  </Animated.View>
-                  <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
-                    <Text style={styles.text}>back</Text>
-                    <Button
-                      title="definition"
-                    // onPress={() => { setModalVisible(true) }}
-                    />
-                  </Animated.View>
-                </View>
-              </View>
-            )
-          }}
-          showSecondCard={false}
-          onSwiped={(cardIndex) => {
-            // setIsFlipped(!isFlipped)
-            isFlippedRef.current = !isFlippedRef.current
+      <Swiper
+        cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+        renderCard={(card) => {
+          return (
+            <View>
+              <View style={styles.container}>
+                <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+                <Text style={styles.text}>front</Text>
+                <Button style={{marginTop: 2}}title='Open Modal' onPress={() => setModalVisible(true)}></Button>
 
-            console.log(cardIndex)
-          }}
-          overlayLabels={myOverlayLabels}
-          // overlayLabelStyle={styles.myOverlayStyle}
-          onTapCard={(cardIndex) => {
-            flipCard()
-          }}
-          onSwipedAll={() => { console.log('onSwipedAll') }}
-          cardIndex={0}
-          infinite={true}
-          backgroundColor={'gray'}
-          stackSize={3}
-          stackSeparation={5}>
-        </Swiper>
+                </Animated.View>
+                <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
+                  <Text style={styles.text}>back</Text>
+                  <Text style={styles.text}>{card}</Text>
+                  <Button title='Open Modal' onPress={() => setModalVisible(true)}></Button>
+
+
+                </Animated.View>
+              </View>
+            </View>
+          )
+        }}
+        showSecondCard={false}
+        onSwiped={(cardIndex) => {
+          // setIsFlipped(!isFlipped)
+          isFlippedRef.current = !isFlippedRef.current
+
+          console.log(cardIndex)
+        }}
+        overlayLabels={myOverlayLabels}
+        // overlayLabelStyle={styles.myOverlayStyle}
+        onTapCard={(cardIndex) => {
+          flipCard()
+        }}
+        onSwipedAll={() => { console.log('onSwipedAll') }}
+        cardIndex={0}
+        infinite={true}
+        backgroundColor={'gray'}
+        stackSize={3}
+        stackSeparation={5}>
+      </Swiper>
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false)} // closes modal when back button is pressed
+        }>
+        <View style={{ flex: 1 }}>
+          <Text>Here I am :)</Text>
+          <Button
+            title="Hide modal"
+            onPress={() => { setModalVisible(!modalVisible) }} />
+        </View>
+      </Modal>
+
+
+
     </View >
   );
 };
@@ -101,6 +117,8 @@ const { width, height } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+
     // justifyContent: 'center',
     alignItems: 'center'
   },
@@ -137,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 50,
     backgroundColor: "transparent",
-    color: "white"
+    color: "white",
   },
   swiperCard: {
     backgroundColor: "lime-400"
