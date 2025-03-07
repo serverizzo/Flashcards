@@ -102,7 +102,8 @@ const { width, height } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    // justifyContent: 'center',
+    alignItems: 'center'
   },
   cardContainer: {
     height: height - 10,
