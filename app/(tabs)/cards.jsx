@@ -6,9 +6,6 @@ export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
   var isFlippedRef = useRef(false)
-  var count = useRef(0)
-
-  const [modalVisible, setModalVisible] = React.useState(false);
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -53,14 +50,6 @@ export default function CardsScreen() {
     isFlippedRef.current = !isFlippedRef.current
   };
 
-
-  useEffect(() => {
-    console.log("count", count)
-    count += 1
-  })
-
-
-
   return (
     <View style={styles.container}>
       <Swiper
@@ -77,35 +66,8 @@ export default function CardsScreen() {
                   <Text style={styles.text}>back</Text>
                   <Button
                     title="definition"
-                    onPress={() => { setModalVisible(true) }}
+                    // onPress={() => { setModalVisible(true) }}
                   />
-                  <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      setModalVisible(!modalVisible);
-                    }}>
-                    <View style={styles.modalView}>
-                      <Text style={styles.modalText}>Hello World!</Text>
-                      <Button
-                        title="Hide Modal button"
-                        onPress={() => {
-                          console.log("setting modal to false, button")
-                          setModalVisible(false)
-                          console.log(modalVisible)
-                        }} />
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          console.log("setting modal to false, pressable ")
-                          setModalVisible(false)
-                          console.log(modalVisible)
-                        }}>
-                        <Text style={styles.textStyle}>Hide Modal (pressable)</Text>
-                      </Pressable>
-                    </View>
-                  </Modal>
                 </Animated.View>
               </View>
             </View>
