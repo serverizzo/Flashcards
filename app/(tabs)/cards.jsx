@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, ScrollView, Modal } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
   var isFlippedRef = useRef(false)
+  var count = useRef(0)
+
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -50,39 +53,60 @@ export default function CardsScreen() {
     isFlippedRef.current = !isFlippedRef.current
   };
 
+
+  useEffect(() => {
+    console.log("count", count)
+    count += 1
+  })
+
+
+
   return (
     <View style={styles.container}>
-
-      <Button
-        onPress={() => { console.log('oulala') }}
-        title="Press me">
-        You can press me
-      </Button>
-
-      {/* <View style={styles.container}>
-        <Pressable style={[styles.cardContainer]} onPress={() => { flipCard(); }}>
-          <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
-            <Text style={styles.text}>front</Text>
-          </Animated.View>
-          <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
-            <Text style={styles.text}>back</Text>
-          </Animated.View>
-        </Pressable>
-      </View> */}
-
       <Swiper
         cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
         renderCard={(card) => {
           return (
             <View>
               <View style={styles.container}>
-              <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
+                <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
                   <Text style={styles.text}>front</Text>
                   <Text style={styles.text}>{card}</Text>
-                  </Animated.View>
-                  <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
-                    <Text style={styles.text}>back</Text>
-                  </Animated.View>
+                </Animated.View>
+                <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
+                  <Text style={styles.text}>back</Text>
+                  <Button
+                    title="definition"
+                    onPress={() => { setModalVisible(true) }}
+                  />
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                      setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Hello World!</Text>
+                      <Button
+                        title="Hide Modal button"
+                        onPress={() => {
+                          console.log("setting modal to false, button")
+                          setModalVisible(false)
+                          console.log(modalVisible)
+                        }} />
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          console.log("setting modal to false, pressable ")
+                          setModalVisible(false)
+                          console.log(modalVisible)
+                        }}>
+                        <Text style={styles.textStyle}>Hide Modal (pressable)</Text>
+                      </Pressable>
+                    </View>
+                  </Modal>
+                </Animated.View>
               </View>
             </View>
           )
@@ -94,7 +118,11 @@ export default function CardsScreen() {
 
           console.log(cardIndex)
         }}
-        onTapCard={(cardIndex) => { flipCard() }}
+        overlayLabels={myOverlayLabels}
+        // overlayLabelStyle={styles.myOverlayStyle}
+        onTapCard={(cardIndex) => {
+          flipCard()
+        }}
         onSwipedAll={() => { console.log('onSwipedAll') }}
         cardIndex={0}
         infinite={true}
@@ -102,20 +130,6 @@ export default function CardsScreen() {
         stackSize={3}
         stackSeparation={5}>
       </Swiper>
-
-
-      {/* <View style={styles.container}>
-        <Pressable style={styles.cardContainer} onPress={flipCard}>
-          <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
-            <Text style={styles.text}>front</Text>
-          </Animated.View>
-          <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
-            <Text style={styles.text}>back</Text>
-          </Animated.View>
-        </Pressable>
-      </View> */}
-
-
 
     </View >
   );
@@ -126,8 +140,7 @@ const { width, height } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5FCFF",
-    marginTop: 100,
+    backgroundColor: "white",
   },
   cardContainer: {
     height: height - 10,
@@ -141,13 +154,25 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
     position: "absolute",
     width: width - 20,
-    height: height / 3,
+    height: height * .7,
   },
   cardBack: {
     backgroundColor: "#4e44c0"
   },
   cardFront: {
     backgroundColor: "#7140ce"
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    }
   },
   text: {
     textAlign: "center",
@@ -159,3 +184,75 @@ const styles = StyleSheet.create({
     backgroundColor: "lime-400"
   }
 });
+
+
+const myOverlayLabels = {
+  bottom: {
+    title: 'BLEAH',
+    style: {
+      label: {
+        backgroundColor: 'white',
+        borderColor: 'black',
+        color: 'grey',
+        borderWidth: 1
+      },
+      wrapper: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    }
+  },
+  left: {
+    title: 'NOPE',
+    style: {
+      label: {
+        backgroundColor: 'white',
+        borderColor: 'black',
+        color: 'red',
+        borderWidth: 1
+      },
+      wrapper: {
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+        marginTop: 30,
+        marginLeft: -30
+      }
+    }
+  },
+  right: {
+    title: 'LIKE',
+    style: {
+      label: {
+        backgroundColor: 'white',
+        borderColor: 'black',
+        color: 'green',
+        borderWidth: 1
+      },
+      wrapper: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        marginTop: 30,
+        marginLeft: 30
+      }
+    }
+  },
+  top: {
+    title: 'SUPER LIKE',
+    style: {
+      label: {
+        backgroundColor: 'black',
+        borderColor: 'black',
+        color: 'white',
+        borderWidth: 1
+      },
+      wrapper: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    }
+  }
+}
