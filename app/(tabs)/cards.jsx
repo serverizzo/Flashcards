@@ -88,7 +88,7 @@ export default function CardsScreen() {
         onSwipedAll={() => { console.log('onSwipedAll') }}
         cardIndex={0}
         infinite={true}
-        backgroundColor={'#616622'}
+        backgroundColor={'gray'}
         stackSize={3}
         stackSeparation={5}>
       </Swiper>
