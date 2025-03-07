@@ -61,6 +61,7 @@ export default function CardsScreen() {
               <View style={styles.container}>
                 <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
                 <Text style={styles.text}>front</Text>
+                <Text style={styles.text}>{card}</Text>
                 <Button style={{marginTop: 2}}title='Open Modal' onPress={() => setModalVisible(true)}></Button>
 
                 </Animated.View>
@@ -75,7 +76,7 @@ export default function CardsScreen() {
             </View>
           )
         }}
-        showSecondCard={false}
+        showSecondCard={true}
         onSwiped={(cardIndex) => {
           // setIsFlipped(!isFlipped)
           isFlippedRef.current = !isFlippedRef.current
@@ -95,6 +96,7 @@ export default function CardsScreen() {
         stackSeparation={5}>
       </Swiper>
       <Modal
+        animationType="slide"
         visible={modalVisible}
         onRequestClose={() => {setModalVisible(false)} // closes modal when back button is pressed
         }>
@@ -105,9 +107,6 @@ export default function CardsScreen() {
             onPress={() => { setModalVisible(!modalVisible) }} />
         </View>
       </Modal>
-
-
-
     </View >
   );
 };
