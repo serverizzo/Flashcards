@@ -93,7 +93,7 @@ export default function CardsScreen() {
         onSwipedAll={() => { console.log('onSwipedAll') }}
         cardIndex={0}
         infinite={true}
-        backgroundColor={'gray'}
+        backgroundColor={styles.offWhiteBackground.backgroundColor}
         stackSize={3}
         stackSeparation={5}>
       </Swiper>
@@ -104,7 +104,7 @@ export default function CardsScreen() {
           setModalVisible(false)  // closes modal when back button is pressed
         }}
       >
-        <View style={{ flex: 1 }}>
+        <View style={[styles.modalView, styles.offWhiteBackground] }>
           <View style={{ padding: 20 }}>
             <InputOutline
               ref={inputRef}
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
+
   card: {
     borderRadius: 10,
     fontSize: 50,
@@ -150,17 +151,11 @@ const styles = StyleSheet.create({
   cardFront: {
     backgroundColor: "#7140ce"
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    }
+  offWhiteBackground:{
+    backgroundColor: "#f0f0f0"
+  },
+  modalView:{
+    flex: 1,
   },
   text: {
     textAlign: "center",
