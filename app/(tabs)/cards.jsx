@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, ScrollView, Modal } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
+import { InputOutline, InputStandard } from 'react-native-input-outline';
 
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
   var isFlippedRef = useRef(false)
+  const inputRef = useRef(null);
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -60,9 +62,9 @@ export default function CardsScreen() {
             <View>
               <View style={styles.container}>
                 <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
-                <Text style={styles.text}>front</Text>
-                <Text style={styles.text}>{card}</Text>
-                <Button style={{marginTop: 2}}title='Open Modal' onPress={() => setModalVisible(true)}></Button>
+                  <Text style={styles.text}>front</Text>
+                  <Text style={styles.text}>{card}</Text>
+                  <Button style={{ marginTop: 2 }} title='Open Modal' onPress={() => setModalVisible(true)}></Button>
 
                 </Animated.View>
                 <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
@@ -98,9 +100,19 @@ export default function CardsScreen() {
       <Modal
         animationType="slide"
         visible={modalVisible}
-        onRequestClose={() => {setModalVisible(false)} // closes modal when back button is pressed
-        }>
+        onRequestClose={() => {
+          setModalVisible(false)  // closes modal when back button is pressed
+        }}
+      >
         <View style={{ flex: 1 }}>
+          <View style={{ padding: 20 }}>
+            <InputOutline
+              ref={inputRef}
+            // error={error} // wont take effect until a message is passed
+            />
+
+            <InputStandard />
+          </View>
           <Text>Here I am :)</Text>
           <Button
             title="Hide modal"
