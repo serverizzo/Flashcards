@@ -2,11 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, ScrollView, Modal } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { InputOutline, InputStandard } from 'react-native-input-outline';
+import CONFIG from '../../config';
+
 
 export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [cards, setCards] = React.useState(['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']);
   var isFlippedRef = useRef(false)
   const inputRef = useRef(null);
 
@@ -29,6 +32,20 @@ export default function CardsScreen() {
       { rotateY: backInterpolate }
     ]
   };
+
+  useEffect(() => {
+    fetch(`http://${CONFIG.API_URL}:3000/api/v1/words`) // How do I make this HTTPS?
+    .then(res => res.json())
+    .then(data => {
+      console.log("data")
+      console.log(data)
+      setCards(data.words)}
+    )
+    .catch(err => console.log(err))
+    console.log("use effect called")
+    console.log(cards)
+  }, [])
+
 
   const flipCard = () => {
     console.log("pressed flip card")
@@ -56,7 +73,7 @@ export default function CardsScreen() {
   return (
     <View style={styles.container}>
       <Swiper
-        cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+        cards={cards}
         renderCard={(card) => {
           return (
             <View>
@@ -104,7 +121,7 @@ export default function CardsScreen() {
           setModalVisible(false)  // closes modal when back button is pressed
         }}
       >
-        <View style={[styles.modalView, styles.offWhiteBackground] }>
+        <View style={[styles.modalView, styles.offWhiteBackground]}>
           <View style={{ padding: 20 }}>
             <InputOutline
               ref={inputRef}
@@ -151,10 +168,10 @@ const styles = StyleSheet.create({
   cardFront: {
     backgroundColor: "#7140ce"
   },
-  offWhiteBackground:{
+  offWhiteBackground: {
     backgroundColor: "#f0f0f0"
   },
-  modalView:{
+  modalView: {
     flex: 1,
   },
   text: {
