@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, ScrollView, Modal, TextInput } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { InputOutline, InputStandard } from 'react-native-input-outline';
 import CONFIG from '../../config';
@@ -9,9 +9,12 @@ export default function CardsScreen() {
 
   const [isFlipped, setIsFlipped] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [currentCardText, setCurrentCardText] = React.useState("");
+  const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
   const [cards, setCards] = React.useState(['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']);
   var isFlippedRef = useRef(false)
   const inputRef = useRef(null);
+  const [swiperKey, setSwiperKey] = React.useState(false);
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -33,15 +36,23 @@ export default function CardsScreen() {
     ]
   };
 
+  const openModal = () => {
+    console.log("Inside the openmodal")
+    console.log("currentCardIndex", currentCardIndex)
+    setCurrentCardText(cards[currentCardIndex])
+    setModalVisible(true)
+  }
+
   useEffect(() => {
     fetch(`http://${CONFIG.API_URL}:3000/api/v1/words`) // How do I make this HTTPS?
-    .then(res => res.json())
-    .then(data => {
-      console.log("data")
-      console.log(data)
-      setCards(data.words)}
-    )
-    .catch(err => console.log(err))
+      .then(res => res.json())
+      .then(data => {
+        console.log("data")
+        console.log(data)
+        setCards(data.words)
+      }
+      )
+      .catch(err => console.log(err))
     console.log("use effect called")
     console.log(cards)
   }, [])
@@ -74,6 +85,7 @@ export default function CardsScreen() {
     <View style={styles.container}>
       <Swiper
         cards={cards}
+        key = {swiperKey} // needed to trigger rerender of cards
         renderCard={(card) => {
           return (
             <View>
@@ -81,14 +93,13 @@ export default function CardsScreen() {
                 <Animated.View style={[styles.cardFront, styles.card, flipToFront]}>
                   <Text style={styles.text}>front</Text>
                   <Text style={styles.text}>{card}</Text>
-                  <Button style={{ marginTop: 2 }} title='Open Modal' onPress={() => setModalVisible(true)}></Button>
+                  <Button style={{ marginTop: 2 }} title='Open Modal' onPress={openModal}></Button>
 
                 </Animated.View>
                 <Animated.View style={[styles.cardBack, styles.card, flipToBack]}>
                   <Text style={styles.text}>back</Text>
                   <Text style={styles.text}>{card}</Text>
-                  <Button title='Open Modal' onPress={() => setModalVisible(true)}></Button>
-
+                  <Button title='Open Modal' onPress={openModal}></Button>
 
                 </Animated.View>
               </View>
@@ -97,10 +108,8 @@ export default function CardsScreen() {
         }}
         showSecondCard={true}
         onSwiped={(cardIndex) => {
-          // setIsFlipped(!isFlipped)
-          isFlippedRef.current = !isFlippedRef.current
-
           console.log(cardIndex)
+          setCurrentCardIndex(cardIndex + 1)
         }}
         overlayLabels={myOverlayLabels}
         // overlayLabelStyle={styles.myOverlayStyle}
@@ -123,17 +132,28 @@ export default function CardsScreen() {
       >
         <View style={[styles.modalView, styles.offWhiteBackground]}>
           <View style={{ padding: 20 }}>
-            <InputOutline
-              ref={inputRef}
-            // error={error} // wont take effect until a message is passed
+            {/* <TextInput ref={inputRef} placeholder={currentCard} /> */}
+            {/* <TextInput ref={inputRef} placeholder="Type here" /> */}
+            <TextInput
+              style={styles.input}
+              onChangeText={setCurrentCardText}
+              value={currentCardText}
             />
-
-            <InputStandard />
           </View>
           <Text>Here I am :)</Text>
           <Button
             title="Hide modal"
-            onPress={() => { setModalVisible(!modalVisible) }} />
+            onPress={() => {
+              setModalVisible(!modalVisible)
+              cards[currentCardIndex] = currentCardText
+              // update array s.t. current card is in the front. 
+              // it needs to be done this way because on the rereder below, the first card is the one to appear
+              // This way, the user doesn't lose their place every time.
+              var ending = cards.splice(0, currentCardIndex)
+              var combined = cards.concat(ending)
+              setCards(combined)
+              setSwiperKey(!swiperKey) // Triggers card text to rerender
+            }} />
         </View>
       </Modal>
     </View >
