@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, Button, Pressable, Animated, Dimensions, Scroll
 import Swiper from 'react-native-deck-swiper';
 import { InputOutline, InputStandard } from 'react-native-input-outline';
 import CONFIG from '../../config';
+import firestore from '@react-native-firebase/firestore';
+import { collection, query, where, getDocs, getFirestore } from '@react-native-firebase/firestore';
+
 
 
 export default function CardsScreen() {
@@ -15,6 +18,11 @@ export default function CardsScreen() {
   var isFlippedRef = useRef(false)
   const inputRef = useRef(null);
   const [swiperKey, setSwiperKey] = React.useState(false);
+  const usersCollection = firestore().collection('Cards');
+
+
+
+
 
   const flipAnimation = useRef(new Animated.Value(0)).current
   const frontInterpolate = flipAnimation.interpolate({
@@ -55,6 +63,29 @@ export default function CardsScreen() {
       .catch(err => console.log(err))
     console.log("use effect called")
     console.log(cards)
+
+    async function fetchData() {
+      try {
+        const db = getFirestore();
+  
+        const q = query(collection(db, 'Cards'));
+        
+        const querySnapshot = await getDocs(q);
+        
+        querySnapshot.forEach(doc => {
+          console.log(doc.id, ' => ', doc.data());
+        });
+     
+     
+     
+      } catch (error) {
+        console.error("Error fetching documents: ", error);
+      }
+    }
+
+    fetchData();
+
+
   }, [])
 
 
@@ -85,7 +116,7 @@ export default function CardsScreen() {
     <View style={styles.container}>
       <Swiper
         cards={cards}
-        key = {swiperKey} // needed to trigger rerender of cards
+        key={swiperKey} // needed to trigger rerender of cards
         renderCard={(card) => {
           return (
             <View>
