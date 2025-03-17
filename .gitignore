@@ -37,3 +37,7 @@ config.js
 *.tsbuildinfo
 
 app-example
+
+
+# my notes
+notes.md

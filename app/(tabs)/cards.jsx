@@ -11,7 +11,7 @@ export default function CardsScreen() {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [currentCardText, setCurrentCardText] = React.useState("");
   const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
-  const [cards, setCards] = React.useState(['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']);
+  const [cards, setCards] = React.useState(['DOooOO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']);
   var isFlippedRef = useRef(false)
   const inputRef = useRef(null);
   const [swiperKey, setSwiperKey] = React.useState(false);
